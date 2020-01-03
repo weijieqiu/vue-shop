@@ -1,19 +1,10 @@
 <template>
     <el-container>
         <el-header>
-            <el-menu
-                    :default-active="activeIndex"
-                    class="el-menu-demo"
-                    mode="horizontal"
-                    @select="handleSelect"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    active-text-color="#ffd04b">
-                <el-menu-item index="1">电商管理系统</el-menu-item>
-                <el-menu-item index="2"  class="logout">
-                    <el-button type="warning" @click="logout()" size="small">退出</el-button>
-                </el-menu-item>
-            </el-menu>
+                <div>
+                    <span>电商后台管理系统</span>
+                </div>
+                <el-button type="warning" @click="logout()" size="small">退出</el-button>
         </el-header>
         <el-container>
             <el-aside width="200px">Aside</el-aside>
@@ -67,21 +58,29 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+    .el-container{
+        height: 100%;
+    }
+
     .el-header {
-        background-color: rgb(84, 92, 100);
-
-    }
-
-    .el-menu {
         display: flex;
-        justify-content: flex-start;
         flex-direction: row;
+        justify-content: space-between;
         align-items: center;
+        background-color:rgb(84, 92, 100);
+        border-right: none;
     }
 
-    .el-menu-item.logout {
-      margin-left: auto;
+
+    .el-header span{
+        color: #fff;
+        font-size: 24px;
     }
+
+    /*.el-menu-item.logout {*/
+    /*  margin-left: auto;*/
+    /*}*/
 
 
 </style>
