@@ -1,6 +1,6 @@
 ## 2020-01-04
 - 实现侧边栏动态展开和关闭的效果
-![image](./public/printscreen/GIF 2020-1-4 16-07-34.gif)
+![image](public/printscreen/GIF_2020-1-4_16-07-34.gif)
 - 根据后端数据动态显示菜单列表
 ![image](./public/printscreen/Snipaste_2020-01-04_15-25-09.png)
 ## 2020-01-03
