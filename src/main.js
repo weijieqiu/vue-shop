@@ -16,6 +16,14 @@ import './plugins/element.js'
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://localhost:8888/'
+axios.interceptors.request.use(config =>{
+  // config.headers.Authorization = window.sessionStorage.getItem('token')
+  config.headers.common['token'] = window.sessionStorage.getItem('token')
+  // console.log(sessionStorage.getItem('token'))
+  return config;
+},error => {
+  return Promise.reject(error)
+})
 
 new Vue({
   router,
