@@ -7,12 +7,15 @@
             <el-button type="warning" @click="logout()" size="small">退出</el-button>
         </el-header>
         <el-container>
-            <el-aside width="200px">
+            <el-aside :width="isCollapse ? '64px': '200px'">
+                <div @click="toggerButton()" class="toggerButton">|||</div>
                 <el-menu
                         class="el-menu-vertical-demo"
-                        background-color="#545c64"
+                        background-color="#404040"
                         text-color="#fff"
                         active-text-color="#ffd04b"
+                        :collapse="isCollapse"
+                        :collapse-transition	="false"
                 >
                     <el-submenu :index="menu.id + ''" v-for="menu in menuList" :key="menu.id">
                         <!--                        一级菜单的模板区域 -->
@@ -45,7 +48,8 @@
             return {
                 msg: "Hello",
                 activeIndex: '1',
-                menuList: []
+                menuList: [],
+                isCollapse: false
 
             }
         },
@@ -94,6 +98,10 @@
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            toggerButton(){
+                console.log("点击toggerButton")
+                this.isCollapse = !this.isCollapse;
             }
         }
     }
@@ -111,7 +119,7 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        background-color: rgb(84, 92, 100);
+        background-color: #404040;
         border-right: none;
     }
 
@@ -122,7 +130,7 @@
     }
 
     .el-aside {
-        background-color: rgb(84, 92, 100);
+        background-color: #404040;
     }
 
     .el-menu {
@@ -132,6 +140,16 @@
     /*.el-menu-item.logout {*/
     /*  margin-left: auto;*/
     /*}*/
+
+    .toggerButton{
+        background-color: #404040;
+        color: #ffecec;
+        font-size: 14px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
 
 
 </style>

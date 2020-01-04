@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
-import HelloWorld from '../components/HelloWorld.vue'
+import Main from '../components/Main.vue'
 
 
 Vue.use(VueRouter)
@@ -23,7 +23,7 @@ const routes = [
     }, {
         path: '/hello',
         name: 'hello',
-        component: HelloWorld
+        component: Main
     }
 ]
 
