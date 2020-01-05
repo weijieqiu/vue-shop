@@ -15,7 +15,9 @@
                         text-color="#fff"
                         active-text-color="#ffd04b"
                         :collapse="isCollapse"
-                        :collapse-transition	="false"
+                        :collapse-transition="false"
+                        :router="true"
+                        :default-active="navStatus"
                 >
                     <el-submenu :index="menu.id + ''" v-for="menu in menuList" :key="menu.id">
                         <!--                        一级菜单的模板区域 -->
@@ -25,7 +27,8 @@
                             <!--                            文本                      -->
                             <span>{{menu.authName}}</span>
                         </template>
-                        <el-menu-item :index="subMenu.id + ''" v-for="subMenu in menu.children" :key="subMenu.id">
+                        <el-menu-item :index="'/'+ subMenu.path" v-for="subMenu in menu.children" :key="subMenu.id"
+                                      @click="saveNavStatus(subMenu.path)">
                             <template slot="title">
                                 <!--                            图标 -->
                                 <i class="el-icon-location"></i>
@@ -36,7 +39,9 @@
                     </el-submenu>
                 </el-menu>
             </el-aside>
-            <el-main>Main</el-main>
+            <el-main>
+                <router-view/>
+            </el-main>
         </el-container>
     </el-container>
 </template>
@@ -49,21 +54,26 @@
                 msg: "Hello",
                 activeIndex: '1',
                 menuList: [],
-                isCollapse: false
+                isCollapse: false,
+                navStatus: ''
 
             }
         },
-        created(){
-            var that = this
-          this.$http.get('/api/getMenuList').then(function (response) {
-              console.log(response)
-              if(response.data.status === "200"){
-                  // console.log(response.data.data)
-                  // that.menuList.push(response.data.data)
-                  that.menuList =response.data.data
-                console.log(that.menuList)
-              }
-          }).catch();
+        created() {
+            var that = this;
+            this.$http.get('/api/getMenuList').then(function (response) {
+                console.log(response)
+                if (response.data.status === "200") {
+                    // console.log(response.data.data)
+                    // that.menuList.push(response.data.data)
+                    that.menuList = response.data.data
+                    console.log(that.menuList)
+                }
+            }).catch();
+            this.navStatus = sessionStorage.getItem('navStatus')
+        },
+        updated(){
+            this.navStatus = sessionStorage.getItem('navStatus')
         },
         methods: {
             logout() {
@@ -77,7 +87,8 @@
                         message: '退出成功!'
                     });
                     if (sessionStorage.getItem('token')) {
-                        sessionStorage.removeItem('token')
+                        // sessionStorage.removeItem('token')
+                        sessionStorage.clear()
                         this.$router.replace(
                             '/login'
                         )
@@ -99,9 +110,14 @@
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
-            toggerButton(){
+            toggerButton() {
                 console.log("点击toggerButton")
                 this.isCollapse = !this.isCollapse;
+            },
+            // 保存链接的状态
+            saveNavStatus(path) {
+                sessionStorage.setItem("navStatus", '/'+path);
+                this.navStatus = '/' + path;
             }
         }
     }
@@ -141,7 +157,7 @@
     /*  margin-left: auto;*/
     /*}*/
 
-    .toggerButton{
+    .toggerButton {
         background-color: #404040;
         color: #ffecec;
         font-size: 14px;

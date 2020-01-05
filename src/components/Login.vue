@@ -71,7 +71,7 @@
                                         type: 'success'
                                     });
                                     sessionStorage.setItem("token", response.data.data.token);
-                                    that.$router.push("hello");
+                                    that.$router.push("home");
                                 } else {
                                     that.$message({
                                         message: '请检查用户名和密码',
