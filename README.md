@@ -1,3 +1,8 @@
+## 2020-01-07
+- 用户列表分页功能
+![image](public/printscreen/Snipaste_2020-01-07_09-32-05.png)
+- 用户状态按钮更新到后台
+![image](public/printscreen/Snipaste_2020-01-07_11-46-11.png)
 ## 2020-01-05
 - 用户列表显示效果
 ![image](public/printscreen/Snipaste_2020-01-05_17-20-52.png)

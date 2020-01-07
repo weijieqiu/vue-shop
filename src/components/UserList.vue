@@ -12,7 +12,7 @@
         <el-card class="box-card">
             <el-row :gutter="20">
                 <el-col :span="7">
-                    <el-input placeholder="请输入内容" >
+                    <el-input placeholder="请输入内容">
                         <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
                 </el-col>
@@ -29,15 +29,18 @@
                 <el-table-column label="邮箱" prop="email"></el-table-column>
                 <el-table-column label="电话" prop="telephone"></el-table-column>
                 <el-table-column label="角色" prop="role"></el-table-column>
-                <el-table-column label="状态" >
+                <el-table-column label="状态">
                     <template slot-scope="scope">
-                        <!--{{scope.row.status}}-->
-                        <el-switch v-model="scope.row.status === '启用' ? true : false"></el-switch>
+                        <el-tooltip :content="'状态: ' + scope.row.status" placement="top">
+                            <el-switch v-model="scope.row.status" active-value="启用"
+                                       inactive-value="禁用" active-color="#13ce66"
+                                       inactive-color="#ff4949" @change="change($event,scope.row)"></el-switch>
+                        </el-tooltip>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                    <!--     修改按钮 -->
+                        <!--     修改按钮 -->
                         <el-tooltip effect="dark" content="修改" placement="top" :enterable="false">
                             <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
                         </el-tooltip>
@@ -51,16 +54,31 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-row :gutter="20">
+                <el-col :span="8" :offset="14">
+                    <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="queryInfo.pageNum"
+                            :page-sizes="[1, 2, 5, 10]"
+                            :page-size="queryInfo.pageSize"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="total">
+                    </el-pagination>
+                </el-col>
+            </el-row>
         </el-card>
 
     </div>
 </template>
 
 <style scoped>
-.el-table{
-    margin-top: 15px;
-    font-size: 12px;
-}
+    .el-table {
+        margin-top: 15px;
+        font-size: 12px;
+        margin-bottom: 15px
+    }
+
 </style>
 
 <script>
@@ -72,33 +90,52 @@
                 queryInfo: {
                     query: '',
                     pageNum: 1,
-                    pageSize:2
+                    pageSize: 2
                 },
-                userList:[],
-                total:0
+                userList: [],
+                total: 0,
+                currentPage: 1
             }
         },
         created() {
             sessionStorage.setItem("navStatus", '/userList')
             this.getUserList();
         },
-        methods:{
-            // getUserList(){
-            //     this.$http.get('/api/getUserList',{ params: this.queryInfo}).then(function (response) {
-            //         console.log(response)
-            //     }).catch(function (response) {
-            //         console.log(response)
-            //     })
-            // }
+        methods: {
             async getUserList() {
-                const {data : res} = await this.$http.get('/api/getUserList', { params: this.queryInfo})
+                const {data: res} = await this.$http.get('/api/getUserList', {params: this.queryInfo})
                 console.log(res)
-                if(res.status === "200"){
-                    this.userList = res.data;
-                    this.total = res.data.length;
-                }else {
+                if (res.status === "200") {
+                    this.userList = res.data.userList;
+                    this.total = res.data.total;
+                } else {
                     return this.$message.error('获取用户列表失败');
                 }
+            },
+            async updateUserList(id, status) {
+                const {data: res} = await this.$http.get('/api/updateUserStatus', {params: {id: id, status: status}})
+                console.log(res)
+                if (res.status === "200") {
+                    console.log(res)
+                } else {
+                    return this.$message.error('获取用户列表失败');
+                }
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.queryInfo.pageSize = val;
+                this.getUserList();
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.queryInfo.pageNum = val;
+                this.getUserList();
+            },
+            change($event, data) {
+                console.log("id:" + data.id + "status:" + data.status)
+                this.updateUserList(data.id, data.status);
+                this.getUserList();
+
             }
         }
     }
