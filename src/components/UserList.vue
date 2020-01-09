@@ -10,10 +10,11 @@
         <!--    卡片视图区 -->
 
         <el-card class="box-card">
+            <!-- 搜索与添加区域 -->
             <el-row :gutter="20">
                 <el-col :span="7">
-                    <el-input placeholder="请输入内容">
-                        <el-button slot="append" icon="el-icon-search"></el-button>
+                    <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList()">
+                        <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="4">
@@ -117,8 +118,10 @@
                 console.log(res)
                 if (res.status === "200") {
                     console.log(res)
+                    this.$message.success('更改状态成功')
                 } else {
-                    return this.$message.error('获取用户列表失败');
+                    this.$message.error('更改状态失败')
+
                 }
             },
             handleSizeChange(val) {
@@ -132,10 +135,13 @@
                 this.getUserList();
             },
             change($event, data) {
-                console.log("id:" + data.id + "status:" + data.status)
+                console.log("id:" + data.id + "status:" + data.status);
                 this.updateUserList(data.id, data.status);
                 this.getUserList();
-
+            },
+            queryName(){
+                console.log(this.queryInfo.query)
+                this.getUserList()
             }
         }
     }
